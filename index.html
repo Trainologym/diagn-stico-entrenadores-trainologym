@@ -649,7 +649,7 @@ function pick(k){
   setTimeout(()=>{
     busy = false;
     if(state.i < Q.length-1){ state.i++; renderQ(); show("s-q"); track("pregunta_" + (state.i + 1)); }
-    else { $("ticks").hidden = true; $("meta").textContent="Último paso"; renderDatos(); show("s-datos","Último paso. Tres campos para construir tu frase de posicionamiento."); track("datos_vistos"); }
+    else { $("ticks").hidden = true; $("meta").textContent="Último paso"; renderDatos(); show("s-datos","Último paso. Tres campos para construir tu frase de posicionamiento."); track("formulario_datos"); }
   },170);
 }
 function renderDatos(){
@@ -791,7 +791,6 @@ function renderInforme(){
     ? "Descarga directa en PDF. Sin coste, sin registro y sin dejar tu correo."
     : "Se abre en tu navegador. Sin coste, sin registro y sin dejar tu correo.";
 
-  track("completado",{arquetipo:tipo, indice:s});
   announce(`Diagnóstico completado. Tu resultado es ${t.name}. ${t.verdict}`);
 }
 
@@ -805,7 +804,10 @@ $("qBack").onclick = ()=>{ if(state.i>0){ state.i--; renderQ(); } };
 
 $("datosNext").onclick = ()=>{
   state.esp=$("fEsp").value; state.quien=$("fQuien").value; state.problema=$("fProblema").value;
-  saveURL(); renderInforme(); show("s-informe"); track("informe_visto");
+  saveURL(); renderInforme(); show("s-informe"); track("informe_resultado_final");
+  var __diagLabels = { A1:"invisible_generico", A2:"invisible_nadie_te_oye", A3:"visto_no_elegido", A4:"elegido_atrapado" };
+  var __tipo = arquetipo(scores());
+  track("diagnostico_" + __tipo + "_" + (__diagLabels[__tipo] || __tipo));
   $("meta").textContent="Tu informe";
 };
 
